@@ -43,6 +43,7 @@
 #include <chemkit/atom.h>
 #include <chemkit/bondpredictor.h>
 #include <chemkit/graphicscamera.h>
+#include <chemkit/graphicsmaterial.h>
 
 #include "buildertool.h"
 #include "navigatetool.h"
@@ -63,6 +64,8 @@ BuilderWindow::BuilderWindow(QWidget *parent)
     // properties
     m_file = 0;
     m_inMoleculeEdit = false;
+    m_showPymolSES = false;
+    m_showPymolSAS = false;
 
     // setup ui
     ui->setupUi(this);
@@ -114,6 +117,8 @@ BuilderWindow::BuilderWindow(QWidget *parent)
 
     // setup view
     m_moleculeItem = 0;
+    m_pymolSESItem = 0;
+    m_pymolSASItem = 0;
 
     // setup molecule editor
     m_editor = new chemkit::MoleculeEditor;
@@ -207,6 +212,26 @@ void BuilderWindow::setMolecule(const boost::shared_ptr<chemkit::Molecule> &mole
         m_moleculeItem = 0;
     }
 
+    if (m_pymolSESItem) {
+        if(m_showPymolSES) {
+            ui->graphicsView->deleteItem(m_pymolSESItem);
+        } else {
+            delete m_pymolSESItem;
+        }
+        m_pymolSESItem = 0;
+        m_showPymolSES = false;
+    }
+
+    if (m_pymolSASItem) {
+        if(m_showPymolSAS) {
+            ui->graphicsView->deleteItem(m_pymolSASItem);
+        } else {
+            delete m_pymolSASItem;
+        }
+        m_pymolSASItem = 0;
+        m_showPymolSAS = false;
+    }
+
     // set molecule
     m_molecule = molecule;
 
@@ -226,6 +251,48 @@ void BuilderWindow::setMolecule(const boost::shared_ptr<chemkit::Molecule> &mole
 
     // notify observers
     emit moleculeChanged(molecule.get());
+}
+
+void BuilderWindow::showPymolSES(bool show)
+{
+    if(m_showPymolSES == show){
+        return;
+    }
+
+    m_showPymolSES = show;
+
+    if (m_showPymolSES) {
+        if (!m_pymolSESItem) {
+            m_pymolSESItem = new chemkit::GraphicsPymolSurfaceItem(m_molecule.get(), chemkit::GraphicsPymolSurfaceItem::SolventTypeExcluded);
+            m_pymolSESItem->setOpacity(1.f);
+        }
+        ui->graphicsView->addItem(m_pymolSESItem);
+    } else {
+        if (m_pymolSESItem) {
+            ui->graphicsView->removeItem(m_pymolSESItem);
+        }
+    }
+}
+
+void BuilderWindow::showPymolSAS(bool show)
+{
+    if(m_showPymolSAS == show){
+        return;
+    }
+
+    m_showPymolSAS = show;
+
+    if (m_showPymolSAS) {
+        if (!m_pymolSASItem) {
+            m_pymolSASItem = new chemkit::GraphicsPymolSurfaceItem(m_molecule.get(), chemkit::GraphicsPymolSurfaceItem::SolventTypeAccessible);
+            m_pymolSASItem->setOpacity(1.f);
+        }
+        ui->graphicsView->addItem(m_pymolSASItem);
+    } else {
+        if (m_pymolSASItem) {
+            ui->graphicsView->removeItem(m_pymolSASItem);
+        }
+    }
 }
 
 boost::shared_ptr<chemkit::Molecule> BuilderWindow::molecule() const

@@ -46,30 +46,21 @@ DisplaySettingsDock::DisplaySettingsDock(BuilderWindow *builder)
     : QDockWidget(builder),
       ui(new Ui::DisplaySettingsDock),
       m_builder(builder),
-      m_showHydrogens(false)
+      m_batch(false)
 {
     ui->setupUi(this);
 
     connect(ui->moleculeTypeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(moleculeDisplayTypeChanged(int)));
     connect(ui->showHydrogensCheckBox, SIGNAL(clicked(bool)), SLOT(showHydrogensCheckClicked(bool)));
     connect(ui->showBondOrderCheckBox, SIGNAL(clicked(bool)), SLOT(showBondOrderCheckClicked(bool)));
+    connect(ui->showPymolSESCheckBox, SIGNAL(clicked(bool)), SLOT(showPymolSESCheckClicked(bool)));
+    connect(ui->showPymolSASCheckBox, SIGNAL(clicked(bool)), SLOT(showPymolSASCheckClicked(bool)));
     connect(builder, SIGNAL(moleculeChanged(chemkit::Molecule*)), SLOT(moleculeChanged(chemkit::Molecule*)));
 }
 
 DisplaySettingsDock::~DisplaySettingsDock()
 {
     delete ui;
-}
-
-void DisplaySettingsDock::setShowHydrogens(bool showHydrogens)
-{
-    m_showHydrogens = showHydrogens;
-
-    chemkit::GraphicsMoleculeItem *moleculeItem = m_builder->moleculeItem();
-    if(moleculeItem)
-        moleculeItem->setHydrogensVisible(showHydrogens);
-
-    m_builder->view()->update();
 }
 
 void DisplaySettingsDock::moleculeDisplayTypeChanged(int index)
@@ -84,23 +75,59 @@ void DisplaySettingsDock::moleculeDisplayTypeChanged(int index)
         moleculeItem->setDisplayType(chemkit::GraphicsMoleculeItem::Stick);
     else if(index == 2)
         moleculeItem->setDisplayType(chemkit::GraphicsMoleculeItem::SpaceFilling);
+
+    if(!m_batch) {
+        m_builder->view()->update();
+    }
 }
 
 void DisplaySettingsDock::showHydrogensCheckClicked(bool checked)
 {
-    setShowHydrogens(checked);
+    chemkit::GraphicsMoleculeItem *moleculeItem = m_builder->moleculeItem();
+    if(moleculeItem) {
+        moleculeItem->setHydrogensVisible(checked);
+    }
+    if(!m_batch) {
+        m_builder->view()->update();
+    }
 }
 
 void DisplaySettingsDock::showBondOrderCheckClicked(bool checked)
 {
     chemkit::GraphicsMoleculeItem *moleculeItem = m_builder->moleculeItem();
-    if(moleculeItem)
+    if(moleculeItem) {
         moleculeItem->setBondOrderVisible(checked);
+    }
+    if(!m_batch) {
+        m_builder->view()->update();
+    }
+}
+
+void DisplaySettingsDock::showPymolSESCheckClicked(bool checked)
+{
+    m_builder->showPymolSES(checked);
+    if(!m_batch) {
+        m_builder->view()->update();
+    }
+}
+
+void DisplaySettingsDock::showPymolSASCheckClicked(bool checked)
+{
+    m_builder->showPymolSAS(checked);
+    if(!m_batch) {
+        m_builder->view()->update();
+    }
 }
 
 void DisplaySettingsDock::moleculeChanged(chemkit::Molecule *molecule)
 {
     Q_UNUSED(molecule);
 
+    m_batch = true;
     moleculeDisplayTypeChanged(ui->moleculeTypeComboBox->currentIndex());
+    showHydrogensCheckClicked(ui->showHydrogensCheckBox->checkState());
+    showBondOrderCheckClicked(ui->showBondOrderCheckBox->checkState());
+    showPymolSESCheckClicked(ui->showPymolSESCheckBox->checkState());
+    showPymolSASCheckClicked(ui->showPymolSASCheckBox->checkState());
+    m_batch = false;
 }

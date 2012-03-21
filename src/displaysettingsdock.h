@@ -60,12 +60,12 @@ public:
     DisplaySettingsDock(BuilderWindow *builder);
     ~DisplaySettingsDock();
 
-    void setShowHydrogens(bool showHydrogens);
-
 private slots:
     void moleculeDisplayTypeChanged(int index);
     void showHydrogensCheckClicked(bool checked);
     void showBondOrderCheckClicked(bool checked);
+    void showPymolSESCheckClicked(bool checked);
+    void showPymolSASCheckClicked(bool checked);
     void moleculeChanged(chemkit::Molecule *molecule);
 
 private:
@@ -73,7 +73,7 @@ private:
     BuilderWindow *m_builder;
     chemkit::MoleculeWatcher *m_watcher;
     chemkit::GraphicsMoleculeItem *m_moleculeItem;
-    bool m_showHydrogens;
+    bool m_batch;
 };
 
 #endif // DISPLAYSETTINGSDOCK_H

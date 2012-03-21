@@ -44,6 +44,7 @@
 #include <chemkit/moleculefileformat.h>
 #include <chemkit/graphicsview.h>
 #include <chemkit/graphicsmoleculeitem.h>
+#include <chemkit/graphicspymolsurfaceitem.h>
 
 class BuilderTool;
 class EnergyMinimizer;
@@ -73,6 +74,10 @@ public:
     EnergyMinimizer* energyMinimizer() const;
     void beginMoleculeEdit();
     void endMoleculeEdit();
+
+    // pymol surface
+    void showPymolSES(bool show);
+    void showPymolSAS(bool show);
 
     // view
     chemkit::GraphicsView* view() const;
@@ -123,6 +128,8 @@ private:
     chemkit::MoleculeFile *m_file;
     boost::shared_ptr<chemkit::Molecule> m_molecule;
     chemkit::GraphicsMoleculeItem *m_moleculeItem;
+    chemkit::GraphicsPymolSurfaceItem *m_pymolSESItem;
+    chemkit::GraphicsPymolSurfaceItem *m_pymolSASItem;
     chemkit::MoleculeEditor *m_editor;
     boost::shared_ptr<BuilderTool> m_tool;
     boost::shared_ptr<BuilderTool> m_navigateTool;
@@ -130,6 +137,8 @@ private:
     boost::shared_ptr<BuilderTool> m_manipulateTool;
     EnergyMinimizer *m_energyMinimizer;
     bool m_inMoleculeEdit;
+    bool m_showPymolSES;
+    bool m_showPymolSAS;
 };
 
 #endif // BUILDERWINDOW_H
