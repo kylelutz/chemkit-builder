@@ -1,0 +1,11 @@
+# directories
+build/
+
+# vim temp files
+.*.sw*
+
+# qt generated files
+CMakeLists.txt.user
+
+# os x
+.DS_Store

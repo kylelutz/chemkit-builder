@@ -1,0 +1,21 @@
+chemkit-builder: a lightweight molecular editor built with chemkit
+
+=== Introduction ==============================================================
+The chemkit-builder application is a lightweight 3D molecular editor built
+on top of the chemkit C++ library.
+
+For more information see the chemkit website: http://www.chemkit.org
+
+=== License ===================================================================
+
+The chemkit library is licensed under the BSD license. See the included
+LICENSE file to view the full license text.
+
+=== Contact and Support =======================================================
+
+For support with the chemkit library and/or applications please use one
+of the following contact methods:
+
+Bug Tracker: http://github.com/kylelutz/chemkit/issues
+IRC: #chemkit on irc.freenode.net
+Mailing List: chemkit-discuss@lists.sourceforge.net
