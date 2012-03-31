@@ -42,6 +42,7 @@
 
 #include <chemkit/molecule.h>
 #include <chemkit/forcefield.h>
+#include <chemkit/moleculegeometryoptimizer.h>
 
 class EnergyMinimizer : public QObject
 {
@@ -68,9 +69,10 @@ public:
     void setMoleculeChanged(bool changed);
     bool moleculeChanged() const;
     void setForceField(const QString &name);
-    chemkit::ForceField* forceField() const;
+    std::string forceField() const;
     int state() const;
     QString stateString() const;
+    chemkit::MoleculeGeometryOptimizer* optimizer() const;
 
     // optimization
     chemkit::Real energy() const;
@@ -81,7 +83,6 @@ public slots:
     void stop();
 
 signals:
-    void forceFieldChanged(const chemkit::ForceField *forceField);
     void stateChanged(int state);
 
 private slots:
@@ -93,7 +94,7 @@ private:
 private:
     bool m_moleculeChanged;
     chemkit::Molecule *m_molecule;
-    chemkit::ForceField *m_forceField;
+    chemkit::MoleculeGeometryOptimizer *m_optimizer;
     QString m_forceFieldName;
     int m_state;
     QFutureWatcher<bool> m_minimizationWatcher;

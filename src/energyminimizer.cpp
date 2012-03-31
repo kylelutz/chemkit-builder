@@ -43,15 +43,15 @@ EnergyMinimizer::EnergyMinimizer(chemkit::Molecule *molecule)
 {
     m_molecule = molecule;
     m_moleculeChanged = true;
-    m_state = Stopped;
-    m_forceField = 0;
+    m_optimizer = new chemkit::MoleculeGeometryOptimizer;
     m_forceFieldName = "uff";
+    m_state = Stopped;
     connect(&m_minimizationWatcher, SIGNAL(finished()), SLOT(minimizationStepFinished()));
 }
 
 EnergyMinimizer::~EnergyMinimizer()
 {
-    delete m_forceField;
+    delete m_optimizer;
 }
 
 // --- Properties ---------------------------------------------------------- //
@@ -86,9 +86,9 @@ void EnergyMinimizer::setForceField(const QString &name)
     m_moleculeChanged = true;
 }
 
-chemkit::ForceField* EnergyMinimizer::forceField() const
+std::string EnergyMinimizer::forceField() const
 {
-    return m_forceField;
+    return m_optimizer->forceField();
 }
 
 int EnergyMinimizer::state() const
@@ -109,13 +109,15 @@ QString EnergyMinimizer::stateString() const
     }
 }
 
+chemkit::MoleculeGeometryOptimizer* EnergyMinimizer::optimizer() const
+{
+    return m_optimizer;
+}
+
 // --- Optimization -------------------------------------------------------- //
 chemkit::Real EnergyMinimizer::energy() const
 {
-    if(m_forceField)
-        return m_forceField->energy();
-    else
-        return 0;
+    return m_optimizer->energy();
 }
 
 // --- Slots --------------------------------------------------------------- //
@@ -127,21 +129,18 @@ void EnergyMinimizer::start()
     }
 
     if(m_moleculeChanged){
-        delete m_forceField;
-
         QByteArray forceFieldNameString = m_forceFieldName.toAscii();
-        m_forceField = chemkit::ForceField::create(forceFieldNameString.constData());
-        if(!m_forceField){
+        bool ok = m_optimizer->setForceField(forceFieldNameString.constData());
+        if(!ok){
             setState(SetupFailed);
             return;
         }
 
         setState(SettingUp);
 
-        m_forceField->setMolecule(m_molecule);
-        m_forceField->setup();
-
-        if(!m_forceField->isSetup()){
+        m_optimizer->setMolecule(m_molecule);
+        m_optimizer->setup();
+        if(!ok){
             setState(SetupFailed);
             return;
         }
@@ -149,7 +148,7 @@ void EnergyMinimizer::start()
         m_moleculeChanged = false;
     }
 
-    QFuture<bool> future = QtConcurrent::run(m_forceField, &chemkit::ForceField::minimizationStep, 0.1);
+    QFuture<bool> future = QtConcurrent::run(m_optimizer, &chemkit::MoleculeGeometryOptimizer::step);
     m_minimizationWatcher.setFuture(future);
 
     setState(Running);

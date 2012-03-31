@@ -500,10 +500,7 @@ void BuilderWindow::minimizerStateChanged(int state)
 
         m_editor->beginEdit();
         // update atom positions
-        chemkit::ForceField *forceField = m_energyMinimizer->forceField();
-        foreach(chemkit::ForceFieldAtom *forceFieldAtom, forceField->atoms()){
-            m_editor->setAtomPosition(const_cast<chemkit::Atom *>(forceFieldAtom->atom()), forceFieldAtom->position());
-        }
+        m_energyMinimizer->optimizer()->writeCoordinates();
         m_editor->endEdit();
 
         // run another step
