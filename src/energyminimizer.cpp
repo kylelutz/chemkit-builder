@@ -148,7 +148,8 @@ void EnergyMinimizer::start()
         m_moleculeChanged = false;
     }
 
-    QFuture<bool> future = QtConcurrent::run(m_optimizer, &chemkit::MoleculeGeometryOptimizer::step);
+    QFuture<void> future =
+        QtConcurrent::run(m_optimizer, &chemkit::MoleculeGeometryOptimizer::step);
     m_minimizationWatcher.setFuture(future);
 
     setState(Running);
@@ -171,13 +172,11 @@ void EnergyMinimizer::setState(int state)
 
 void EnergyMinimizer::minimizationStepFinished()
 {
-    bool converged = m_minimizationWatcher.result();
-
     if(m_state == Stopped){
         return;
     }
 
-    if(converged){
+    if(m_optimizer->converged()){
         setState(Converged);
     }
     else{

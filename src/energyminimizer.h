@@ -97,7 +97,7 @@ private:
     chemkit::MoleculeGeometryOptimizer *m_optimizer;
     QString m_forceFieldName;
     int m_state;
-    QFutureWatcher<bool> m_minimizationWatcher;
+    QFutureWatcher<void> m_minimizationWatcher;
 };
 
 #endif // GEOMETRYOPTIMIZER_H
