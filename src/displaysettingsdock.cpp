@@ -38,9 +38,11 @@
 
 #include "builderwindow.h"
 
-#include <chemkit/molecule.h>
-#include <chemkit/moleculewatcher.h>
-#include <chemkit/graphicsmoleculeitem.h>
+#ifndef Q_MOC_RUN
+    #include <chemkit/molecule.h>
+    #include <chemkit/moleculewatcher.h>
+    #include <chemkit/graphicsmoleculeitem.h>
+#endif
 
 DisplaySettingsDock::DisplaySettingsDock(BuilderWindow *builder)
     : QDockWidget(builder),

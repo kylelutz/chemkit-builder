@@ -40,9 +40,11 @@
 #include <QFuture>
 #include <QFutureWatcher>
 
-#include <chemkit/molecule.h>
-#include <chemkit/forcefield.h>
-#include <chemkit/moleculegeometryoptimizer.h>
+#ifndef Q_MOC_RUN
+    #include <chemkit/molecule.h>
+    #include <chemkit/forcefield.h>
+    #include <chemkit/moleculegeometryoptimizer.h>
+#endif
 
 class EnergyMinimizer : public QObject
 {

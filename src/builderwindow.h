@@ -38,13 +38,15 @@
 
 #include <QtGui>
 
-#include <chemkit/chemkit.h>
-#include <chemkit/molecule.h>
-#include <chemkit/moleculeeditor.h>
-#include <chemkit/moleculefileformat.h>
-#include <chemkit/graphicsview.h>
-#include <chemkit/graphicsmoleculeitem.h>
-#include <chemkit/graphicspymolsurfaceitem.h>
+#ifndef Q_MOC_RUN
+    #include <chemkit/chemkit.h>
+    #include <chemkit/molecule.h>
+    #include <chemkit/moleculeeditor.h>
+    #include <chemkit/moleculefileformat.h>
+    #include <chemkit/graphicsview.h>
+    #include <chemkit/graphicsmoleculeitem.h>
+    #include <chemkit/graphicspymolsurfaceitem.h>
+#endif
 
 class BuilderTool;
 class EnergyMinimizer;

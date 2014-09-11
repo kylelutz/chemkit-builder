@@ -38,8 +38,10 @@
 
 #include <QtGui>
 
-#include <chemkit/molecule.h>
-#include <chemkit/moleculefile.h>
+#ifndef Q_MOC_RUN
+    #include <chemkit/molecule.h>
+    #include <chemkit/moleculefile.h>
+#endif
 
 namespace Ui {
     class MoleculeListDock;
