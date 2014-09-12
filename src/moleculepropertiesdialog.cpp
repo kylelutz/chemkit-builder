@@ -36,7 +36,9 @@
 #include "moleculepropertiesdialog.h"
 #include "ui_moleculepropertiesdialog.h"
 
-#include <chemkit/molecule.h>
+#ifndef Q_MOC_RUN
+    #include <chemkit/molecule.h>
+#endif
 
 // --- Construction and Destruction ---------------------------------------- //
 MoleculePropertiesDialog::MoleculePropertiesDialog(const chemkit::Molecule *molecule, QWidget *parent)

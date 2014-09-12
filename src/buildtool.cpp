@@ -35,11 +35,13 @@
 
 #include "buildtool.h"
 
-#include <chemkit/atom.h>
-#include <chemkit/bond.h>
-#include <chemkit/vector3.h>
-#include <chemkit/element.h>
-#include <chemkit/periodictabledialog.h>
+#ifndef Q_MOC_RUN
+    #include <chemkit/atom.h>
+    #include <chemkit/bond.h>
+    #include <chemkit/vector3.h>
+    #include <chemkit/element.h>
+    #include <chemkit/periodictabledialog.h>
+#endif
 
 // --- Construction and Destruction ---------------------------------------- //
 BuildTool::BuildTool(BuilderWindow *builder)

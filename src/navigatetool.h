@@ -38,7 +38,9 @@
 
 #include "buildertool.h"
 
-#include <chemkit/graphicsnavigationtool.h>
+#ifndef Q_MOC_RUN
+    #include <chemkit/graphicsnavigationtool.h>
+#endif
 
 class NavigateTool : public chemkit::GraphicsNavigationTool, public BuilderTool
 {

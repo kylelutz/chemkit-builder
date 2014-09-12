@@ -37,11 +37,13 @@
 
 #include <set>
 
-#include <chemkit/atom.h>
-#include <chemkit/point3.h>
-#include <chemkit/vector3.h>
-#include <chemkit/graphicscamera.h>
-#include <chemkit/graphicsoverlay.h>
+#ifndef Q_MOC_RUN
+    #include <chemkit/atom.h>
+    #include <chemkit/point3.h>
+    #include <chemkit/vector3.h>
+    #include <chemkit/graphicscamera.h>
+    #include <chemkit/graphicsoverlay.h>
+#endif
 
 // --- Construction and Destruction ---------------------------------------- //
 ManipulateTool::ManipulateTool(BuilderWindow *builder)

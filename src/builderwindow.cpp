@@ -38,12 +38,14 @@
 
 #include <algorithm>
 
-#include <boost/make_shared.hpp>
+#ifndef Q_MOC_RUN
+    #include <boost/make_shared.hpp>
 
-#include <chemkit/atom.h>
-#include <chemkit/bondpredictor.h>
-#include <chemkit/graphicscamera.h>
-#include <chemkit/graphicsmaterial.h>
+    #include <chemkit/atom.h>
+    #include <chemkit/bondpredictor.h>
+    #include <chemkit/graphicscamera.h>
+    #include <chemkit/graphicsmaterial.h>
+#endif
 
 #include "buildertool.h"
 #include "navigatetool.h"
